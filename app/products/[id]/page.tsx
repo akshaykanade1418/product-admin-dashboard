@@ -3,10 +3,10 @@
 import { isAxiosError } from "axios";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { getProduct, Product } from "@/lib/api/products";
 
-export default function ProductDetailPage() {
+function ProductDetailPageContent() {
 	const router = useRouter();
 	const params = useParams<{ id: string }>();
 	const searchParams = useSearchParams();
@@ -189,5 +189,19 @@ export default function ProductDetailPage() {
 				</div>
 			</div>
 		</main>
+	);
+}
+
+export default function ProductDetailPage() {
+	return (
+		<Suspense
+			fallback={
+				<main className="flex min-h-screen items-center justify-center bg-slate-100 px-4">
+					<p className="text-slate-600">Loading...</p>
+				</main>
+			}
+		>
+			<ProductDetailPageContent />
+		</Suspense>
 	);
 }

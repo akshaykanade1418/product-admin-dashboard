@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { Suspense, useEffect, useRef, useState, type FormEvent } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
 	addProduct,
@@ -36,7 +36,7 @@ const emptyProductForm: NewProduct = {
 	description: "",
 };
 
-export default function ProductsPage() {
+function ProductsPageContent() {
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
@@ -899,5 +899,19 @@ export default function ProductsPage() {
 				</div>
 			)}
 		</main>
+	);
+}
+
+export default function ProductsPage() {
+	return (
+		<Suspense
+			fallback={
+				<main className="flex min-h-screen items-center justify-center">
+					<p className="text-lg">Loading products...</p>
+				</main>
+			}
+		>
+			<ProductsPageContent />
+		</Suspense>
 	);
 }
